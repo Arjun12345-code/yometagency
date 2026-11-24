@@ -1,0 +1,116 @@
+<!-- ==========================================================================
+     Yomet Agency - Header Component (header.html)
+     For WordPress Elementor Theme Builder Header Template
+     ========================================================================== -->
+<header class="header" id="header">
+  <div class="header-container">
+    <a href="#hero" class="brand-logo" id="brand-logo" aria-label="Yomet Agency">
+      <img src="https://yometagency.com/wp-content/uploads/2026/11/yomet-logo-1.png" alt="Yomet Agency Logo" class="brand-logo-icon" width="40" height="40" onerror="this.onerror=null;this.src='assets/images/yomet-logo-1.png'">
+      <span class="brand-text-wrap">
+        <span class="brand-name">Yomet</span>
+      </span>
+    </a>
+
+    <nav class="nav-menu" id="nav-menu" aria-label="Main Navigation">
+      <a href="#hero" class="nav-link active" id="nav-home">Home</a>
+      <a href="#what-is-agency" class="nav-link" id="nav-agency">Agency</a>
+      <a href="#host" class="nav-link" id="nav-host">Host</a>
+      <a href="#registration" class="nav-link" id="nav-registration">Registration</a>
+      <a href="#footer" class="nav-link" id="nav-contact">Contact</a>
+      <div class="mobile-nav-actions">
+        <a href="https://olamet-client.olamet.net/build2/index.html#/subagentRegister?key=6c46753b47532ae24bd082a7c2810610&guildName=We&nick=We&lang=en" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="btn-mobile-agent">Become Agent</a>
+        <a href="https://olamet-client.olamet.net/build2/index.html#/memberInvitation?key=6c46753b47532ae24bd082a7c2810610&guildName=We&nick=We&lang=en" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" id="btn-mobile-host">Become Host</a>
+      </div>
+    </nav>
+
+    <div class="header-actions">
+      <a href="https://olamet-client.olamet.net/build2/index.html#/subagentRegister?key=6c46753b47532ae24bd082a7c2810610&guildName=We&nick=We&lang=en" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" id="btn-header-agent">Become Agent</a>
+      <a href="https://olamet-client.olamet.net/build2/index.html#/memberInvitation?key=6c46753b47532ae24bd082a7c2810610&guildName=We&nick=We&lang=en" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" id="btn-header-host">Become Host</a>
+      <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  (function () {
+    // Immediate dark body styling
+    document.documentElement.style.setProperty('background-color', '#080512', 'important');
+    if (document.body) {
+      document.body.style.setProperty('background-color', '#080512', 'important');
+    }
+
+    // Image fallback helper
+    document.addEventListener('error', function (e) {
+      if (e.target && e.target.tagName === 'IMG') {
+        var img = e.target;
+        if (!img.dataset.fallbackTried) {
+          img.dataset.fallbackTried = 'true';
+          var filename = img.src.split('/').pop().split('?')[0];
+          if (filename) img.src = 'assets/images/' + filename;
+        }
+      }
+    }, true);
+
+    // Mobile nav toggle
+    var menuToggle = document.getElementById('menu-toggle');
+    var navMenu = document.getElementById('nav-menu');
+    if (menuToggle && navMenu) {
+      function toggleNav(open) {
+        var shouldOpen = open !== undefined ? open : !navMenu.classList.contains('active');
+        navMenu.classList.toggle('active', shouldOpen);
+        menuToggle.classList.toggle('active', shouldOpen);
+        menuToggle.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        document.body.classList.toggle('nav-open', shouldOpen);
+      }
+
+      menuToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleNav();
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+          toggleNav(false);
+        }
+      });
+
+      var navLinks = navMenu.querySelectorAll('a');
+      navLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+          toggleNav(false);
+        });
+      });
+    }
+
+    // Scroll active link spy
+    var sections = document.querySelectorAll('section[id], footer[id]');
+    var navLinksDesktop = document.querySelectorAll('.nav-menu .nav-link');
+    function updateActiveNav() {
+      var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+      var curSectionId = '';
+      sections.forEach(function (sec) {
+        var secTop = sec.offsetTop - 120;
+        var secHeight = sec.offsetHeight;
+        if (scrollY >= secTop && scrollY < secTop + secHeight) {
+          curSectionId = sec.getAttribute('id');
+        }
+      });
+      if (curSectionId) {
+        navLinksDesktop.forEach(function (link) {
+          var href = link.getAttribute('href') || '';
+          if (href === '#' + curSectionId || (curSectionId === 'footer' && href === '#contact')) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    }
+    window.addEventListener('scroll', updateActiveNav, { passive: true });
+  })();
+</script>
+
